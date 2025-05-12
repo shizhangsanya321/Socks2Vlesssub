@@ -371,8 +371,10 @@ async function Html(request) {
             font-size: 1.5rem;
             display: flex;
             align-items: center;
+            position: relative; /* 改用相对定位 */
         }
         
+        /* 为左侧的圆点重新设置样式 */
         .section-title::before {
             content: "";
             display: inline-block;
@@ -381,6 +383,64 @@ async function Html(request) {
             background-color: var(--primary-color);
             margin-right: 10px;
             border-radius: 50%;
+            flex-shrink: 0; /* 防止缩小 */
+        }
+        
+        /* 为信息图标调整样式 */
+        .section-title .info-icon {
+            margin-left: auto; /* 推到最右边 */
+        }
+        
+        /* 添加: 信息图标样式 */
+        .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        .info-icon:hover {
+            transform: scale(1.1);
+            background-color: var(--secondary-color);
+        }
+        
+        /* 添加: 信息提示框样式 */
+        .info-tooltip {
+            display: none;
+            position: fixed;
+            background: white;
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 250px;
+            max-width: 90vw;
+            width: max-content;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            animation: fadeInScale 0.3s ease-out;
+        }
+        
+        /* 添加: 提示框动画 */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
         
         .form-group {
@@ -475,6 +535,13 @@ async function Html(request) {
         @media (max-width: 600px) {
             .output-container {
                 flex-direction: column;
+            }
+
+            .github-corner:hover .octo-arm {
+                animation: none;
+            }
+            .github-corner .octo-arm {
+                animation: octocat-wave 560ms ease-in-out;
             }
         }
         
@@ -590,9 +657,41 @@ async function Html(request) {
         .copied {
             animation: copied 1.5s;
         }
+
+        .github-corner svg {
+            fill: #4a60ea;
+            color: #f0f7ff;
+            position: absolute;
+            top: 0;
+            right: 0;
+            border: 0;
+            width: 80px;
+            height: 80px;
+            z-index: 1000; /* 增加 z-index 确保在最前面图层 */
+        }
+
+        /* 章鱼猫的摇尾巴动效 */
+        @keyframes octocat-wave {
+            0%, 100% { transform: rotate(0); }
+            20%, 60% { transform: rotate(-25deg); }
+            40%, 80% { transform: rotate(10deg); }
+        }
+
+        /* 鼠标悬浮时才触发动画 */
+        .github-corner:hover .octo-arm {
+            animation: octocat-wave 560ms ease-in-out;
+        }
+
     </style>
 </head>
 <body>
+    <a href="https://github.com/cmliu/Socks2Vlesssub" target="_blank" class="github-corner" aria-label="View source on Github">
+					<svg viewBox="0 0 250 250" aria-hidden="true">
+						<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+						<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+						<path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+					</svg>
+	</a>
     <div class="container fade-in">
         <h1>Socks2VLESS订阅生成器</h1>
         
@@ -631,7 +730,16 @@ async function Html(request) {
         
         <!-- 第三个板块：生成订阅 -->
         <div class="section">
-            <h2 class="section-title">订阅链接</h2>
+            <h2 class="section-title">
+                订阅链接
+                <span class="info-icon" id="infoIcon">!</span>
+            </h2>
+            <div id="infoTooltip" class="info-tooltip">
+                <strong>安全提示</strong>：使用优选订阅生成器时，需要您提交 <strong>节点配置信息</strong> 用于生成优选订阅链接。这意味着订阅器的维护者可能会获取到该节点信息。<strong>请自行斟酌使用风险。</strong><br>
+                <br>
+                订阅转换后端：<strong>${subConverter}</strong><br>
+                订阅转换配置文件：<strong>${subConfig}</strong>
+            </div>
             <div class="output-container">
                 <button id="generateBtn" class="button">生成订阅</button>
                 <div id="subscriptionLink" class="output">点击左侧按钮生成订阅链接</div>
@@ -659,6 +767,23 @@ async function Html(request) {
                 }).catch(err => {
                     console.error('复制失败: ', err);
                 });
+            }
+        });
+        
+        // 添加: 处理信息图标点击事件
+        document.getElementById('infoIcon').addEventListener('click', function(event) {
+            event.stopPropagation(); // 阻止事件冒泡
+            const tooltip = document.getElementById('infoTooltip');
+            tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
+        });
+        
+        // 添加: 点击页面其他区域关闭提示框
+        document.addEventListener('click', function(event) {
+            const tooltip = document.getElementById('infoTooltip');
+            const infoIcon = document.getElementById('infoIcon');
+            
+            if (!tooltip.contains(event.target) && !infoIcon.contains(event.target)) {
+                tooltip.style.display = 'none';
             }
         });
 

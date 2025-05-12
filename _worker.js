@@ -383,7 +383,7 @@ async function Html(request) {
         <div class="section">
             <h2 class="section-title">节点信息</h2>
             <div class="form-group">
-                <label for="nodeLink">节点链接:</label>
+                <label for="nodeLink">节点链接（需自行部署 <a href="https://github.com/cmliu/edgetunnel" target="_blank">edgetunnel</a>、<a href="https://github.com/cmliu/epeius" target="_blank">epeius</a>）:</label>
                 <input type="text" id="nodeLink" placeholder="请输入 vless://... 或 trojan://... 格式的节点链接">
                 <div id="nodeLinkError" class="error"></div>
             </div>
@@ -403,7 +403,7 @@ async function Html(request) {
         <div class="section">
             <h2 class="section-title">SOCKS5</h2>
             <div class="form-group">
-                <label for="socks5Api">SOCKS5 API链接 (每行一个):</label>
+                <label for="socks5Api">API链接（每行一个，示例 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a>）:</label>
                 <textarea id="socks5Api" placeholder="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json"></textarea>
             </div>
         </div>

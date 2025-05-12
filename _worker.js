@@ -360,9 +360,13 @@ async function Html(request) {
             border-radius: 4px;
             padding: 10px;
             margin-top: 0;
-            word-break: break-all;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             flex: 1;
-            min-height: 45px;
+            height: 25px;
+            line-height: 25px;
+            cursor: pointer;
         }
         .error {
             color: #d9534f;
@@ -409,12 +413,28 @@ async function Html(request) {
             <h2 class="section-title">订阅链接</h2>
             <div class="output-container">
                 <button id="generateBtn">生成订阅</button>
-                <div id="subscriptionLink" class="output"></div>
+                <div id="subscriptionLink" class="output" title="点击复制"></div>
             </div>
         </div>
     </div>
 
     <script>
+        // 为输出文本框添加点击复制功能
+        document.getElementById('subscriptionLink').addEventListener('click', function() {
+            const text = this.textContent;
+            if (text && !text.includes('点击生成按钮')) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = '已复制到剪贴板!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 1000);
+                }).catch(err => {
+                    console.error('复制失败: ', err);
+                });
+            }
+        });
+
         document.getElementById('generateBtn').addEventListener('click', function() {
             // 获取输入值
             const nodeLink = document.getElementById('nodeLink').value.trim();

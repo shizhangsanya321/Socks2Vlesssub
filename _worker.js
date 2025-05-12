@@ -1,8 +1,8 @@
 let socks5s = [];
 let FileName = 'Socks2VLESS订阅生成器';
 let SUBUpdateTime = 6;
-let subConverter = 'url.v1.mk';
-let subConfig = atob('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NtbGl1L0FDTDRTU1IvbWFpbi9DbGFzaC9jb25maWcvQUNMNFNTUl9PbmxpbmVfRnVsbF9NdWx0aU1vZGUuaW5p');
+let subConverter = 'subapi.cmliussss.net';
+let subConfig = 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini.ini';
 const fakeUserID = '00000000-0000-0000-0000-000000000000';
 const fakeHostName = 'www.baidu.com';
 
@@ -275,127 +275,347 @@ async function Html(request) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socks2VLESS订阅生成器</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
         }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
         .container {
             background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+        }
+        
         h1 {
             text-align: center;
-            color: #333;
-        }
-        .section {
+            color: var(--primary-color);
             margin-bottom: 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-        }
-        .section-title {
-            margin-top: 0;
+            font-weight: 600;
+            position: relative;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            color: #444;
         }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 2px;
+        }
+        
+        .section {
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: box-shadow var(--transition-speed);
+        }
+        
+        .section:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-color);
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+        
         .form-row {
             display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
         .form-row .form-group {
             flex: 1;
             margin-bottom: 0;
         }
+        
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
         }
+        
         input[type="text"], textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border var(--transition-speed), box-shadow var(--transition-speed);
+            background-color: white;
         }
+        
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+        }
+        
         textarea {
-            height: 100px;
+            height: 120px;
             resize: vertical;
         }
-        button {
-            background-color: #4CAF50;
+        
+        .button {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 4px;
-            height: 45px;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
         }
-        button:hover {
-            background-color: #45a049;
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
         }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        .button::before {
+            content: "↗";
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
         .output-container {
             display: flex;
-            align-items: center;
+            align-items: stretch;
             gap: 15px;
         }
+        
+        @media (max-width: 600px) {
+            .output-container {
+                flex-direction: column;
+            }
+        }
+        
         .output {
-            background-color: #f8f8f8;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            margin-top: 0;
-            white-space: nowrap;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 12px 15px;
+            flex: 1;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex: 1;
-            height: 25px;
-            line-height: 25px;
+            white-space: nowrap;
+            position: relative;
             cursor: pointer;
+            transition: background-color var(--transition-speed);
+            padding-right: 80px; /* 修改: 添加右侧填充，为"点击复制"文本留出空间 */
         }
+        
+        .output:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .output::after {
+            content: "点击复制";
+            position: absolute;
+            right: 15px;
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
         .error {
-            color: #d9534f;
-            font-size: 14px;
-            margin-top: 5px;
+            color: var(--warning-color);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: none; /* 修改: 默认不显示 */
+            align-items: center;
+        }
+        
+        .error::before {
+            content: "⚠";
+            margin-right: 5px;
+        }
+        
+        .error.show {  /* 添加: 显示错误时的类 */
+            display: flex;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+        
+        a:hover {
+            color: var (--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            width: max-content;
+            max-width: 250px;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* 复制成功动画 */
+        @keyframes copied {
+            0% { background-color: var(--success-color); }
+            100% { background-color: white; }
+        }
+        
+        .copied {
+            animation: copied 1.5s;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container fade-in">
         <h1>Socks2VLESS订阅生成器</h1>
         
         <!-- 第一个板块：节点信息 -->
         <div class="section">
             <h2 class="section-title">节点信息</h2>
             <div class="form-group">
-                <label for="nodeLink">节点链接（需自行部署 <a href="https://github.com/cmliu/edgetunnel" target="_blank">edgetunnel</a>、<a href="https://github.com/cmliu/epeius" target="_blank">epeius</a>）:</label>
+                <label for="nodeLink">节点链接：</label>
                 <input type="text" id="nodeLink" placeholder="请输入 vless://... 或 trojan://... 格式的节点链接">
                 <div id="nodeLinkError" class="error"></div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="preferredDomain">优选域名:</label>
+                    <label for="preferredDomain">优选域名：</label>
                     <input type="text" id="preferredDomain" placeholder="icook.hk">
                 </div>
                 <div class="form-group">
-                    <label for="preferredPort">优选端口:</label>
+                    <label for="preferredPort">优选端口：</label>
                     <input type="text" id="preferredPort" placeholder="443">
                 </div>
+            </div>
+            <div class="form-group tooltip">
+                <p><small>需自行部署 <a href="https://github.com/cmliu/edgetunnel" target="_blank">edgetunnel</a>、<a href="https://github.com/cmliu/epeius" target="_blank">epeius</a> 等项目</small></p>
             </div>
         </div>
         
@@ -403,8 +623,9 @@ async function Html(request) {
         <div class="section">
             <h2 class="section-title">SOCKS5</h2>
             <div class="form-group">
-                <label for="socks5Api">API链接（每行一个，示例 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a>）:</label>
+                <label for="socks5Api">API链接：</label>
                 <textarea id="socks5Api" placeholder="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json"></textarea>
+                <p><small>每行一个API地址，支持 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> 和 <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a> 格式</small></p>
             </div>
         </div>
         
@@ -412,9 +633,13 @@ async function Html(request) {
         <div class="section">
             <h2 class="section-title">订阅链接</h2>
             <div class="output-container">
-                <button id="generateBtn">生成订阅</button>
-                <div id="subscriptionLink" class="output" title="点击复制"></div>
+                <button id="generateBtn" class="button">生成订阅</button>
+                <div id="subscriptionLink" class="output">点击左侧按钮生成订阅链接</div>
             </div>
+        </div>
+        
+        <div class="footer">
+            © 2025 Socks2VLESS订阅生成器 - <a href="https://github.com/cmliu/Socks2Vlesssub" target="_blank">GitHub</a>
         </div>
     </div>
 
@@ -422,20 +647,29 @@ async function Html(request) {
         // 为输出文本框添加点击复制功能
         document.getElementById('subscriptionLink').addEventListener('click', function() {
             const text = this.textContent;
-            if (text && !text.includes('点击生成按钮')) {
+            if (text && !text.includes('点击左侧按钮')) {
                 navigator.clipboard.writeText(text).then(() => {
                     const originalText = this.textContent;
+                    this.classList.add('copied');
                     this.textContent = '已复制到剪贴板!';
                     setTimeout(() => {
                         this.textContent = originalText;
-                    }, 1000);
+                        this.classList.remove('copied');
+                    }, 1500);
                 }).catch(err => {
                     console.error('复制失败: ', err);
                 });
             }
         });
 
+        // 生成订阅链接按钮的事件监听
         document.getElementById('generateBtn').addEventListener('click', function() {
+            // 添加点击效果
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+            
             // 获取输入值
             const nodeLink = document.getElementById('nodeLink').value.trim();
             let preferredDomain = document.getElementById('preferredDomain').value.trim() || 'icook.hk';
@@ -444,16 +678,24 @@ async function Html(request) {
                 'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json';
             
             // 重置错误消息
-            document.getElementById('nodeLinkError').textContent = '';
+            const nodeLinkErrorElement = document.getElementById('nodeLinkError');
+            nodeLinkErrorElement.textContent = '';
+            nodeLinkErrorElement.classList.remove('show'); // 隐藏错误提示
+            
+            const subscriptionLinkElement = document.getElementById('subscriptionLink');
             
             // 检查节点链接格式
             if (!nodeLink) {
-                document.getElementById('nodeLinkError').textContent = '请输入节点链接';
+                nodeLinkErrorElement.textContent = '请输入节点链接';
+                nodeLinkErrorElement.classList.add('show'); // 显示错误提示
+                subscriptionLinkElement.textContent = '请先填写节点链接';
                 return;
             }
             
             if (!nodeLink.startsWith('vless://') && !nodeLink.startsWith('trojan://')) {
-                document.getElementById('nodeLinkError').textContent = '请输入正确格式的节点链接 (vless:// 或 trojan://)';
+                nodeLinkErrorElement.textContent = '请输入正确格式的节点链接 (vless:// 或 trojan://)';
+                nodeLinkErrorElement.classList.add('show'); // 显示错误提示
+                subscriptionLinkElement.textContent = '节点链接格式错误';
                 return;
             }
 
@@ -467,7 +709,7 @@ async function Html(request) {
                 }
 
                 uuidOrPassword = nodeLink.split('@')[0].split('://')[1];
-                host = host || nodeLink.split('host=')[1].split('&')[0];
+                host = nodeLink.split('host=')[1].split('&')[0];
 
                 if (!host || !uuidOrPassword) {
                     throw new Error("无法从链接中提取必要的信息");
@@ -476,7 +718,9 @@ async function Html(request) {
                 // 调试信息
                 console.log("解析结果:", {linkType, host, uuidOrPassword});
             } catch (error) {
-                document.getElementById('nodeLinkError').textContent = '解析节点链接失败: ' + error.message;
+                nodeLinkErrorElement.textContent = '解析节点链接失败: ' + error.message;
+                nodeLinkErrorElement.classList.add('show'); // 显示错误提示
+                subscriptionLinkElement.textContent = '解析节点链接失败';
                 return;
             }
 
@@ -491,11 +735,24 @@ async function Html(request) {
                 subscriptionLink = \`https://${host}/sub?host=\${encodeURIComponent(host)}&pw=\${encodeURIComponent(uuidOrPassword)}&address=\${encodeURIComponent(preferredDomain)}&port=\${encodeURIComponent(preferredPort)}&socks5api=\${processedSocks5Api}\`;
             }
 
-            // 显示结果
-            document.getElementById('subscriptionLink').textContent = subscriptionLink;
+            // 显示结果，添加渐变效果
+            subscriptionLinkElement.classList.add('copied');
+            setTimeout(() => {
+                subscriptionLinkElement.classList.remove('copied');
+            }, 300);
+            subscriptionLinkElement.textContent = subscriptionLink;
             
             // 添加调试信息
             console.log("生成的订阅链接:", subscriptionLink);
+        });
+        
+        // 为输入字段添加回车键生成功能
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('generateBtn').click();
+                }
+            });
         });
     </script>
 </body>

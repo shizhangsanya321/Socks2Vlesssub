@@ -3,8 +3,8 @@ let FileName = 'Socks2VLESS订阅生成器';
 let SUBUpdateTime = 6;
 let subConverter = 'url.v1.mk';
 let subConfig = atob('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NtbGl1L0FDTDRTU1IvbWFpbi9DbGFzaC9jb25maWcvQUNMNFNTUl9PbmxpbmVfRnVsbF9NdWx0aU1vZGUuaW5p');
-let fakeUserID;
-let fakeHostName;
+const fakeUserID = '00000000-0000-0000-0000-000000000000';
+const fakeHostName = 'www.baidu.com';
 
 export default {
     async fetch(request, env, ctx) {
@@ -24,9 +24,9 @@ export default {
             const uuid = url.searchParams.get('uuid') || url.searchParams.get('password') || url.searchParams.get('pw');
             let subConverterUrl = 替换虚假ID(url.href, uuid, host);
 
-            const fakeUserIDMD5 = await MD5MD5(host + uuid);
-            fakeUserID = fakeUserIDMD5.slice(0, 8) + "-" + fakeUserIDMD5.slice(8, 12) + "-" + fakeUserIDMD5.slice(12, 16) + "-" + fakeUserIDMD5.slice(16, 20) + "-" + fakeUserIDMD5.slice(20);
-            fakeHostName = fakeUserIDMD5.slice(6, 9) + "." + fakeUserIDMD5.slice(13, 19) + ".xyz";
+            // const fakeUserIDMD5 = await MD5MD5(host + uuid);
+            // fakeUserID = fakeUserIDMD5.slice(0, 8) + "-" + fakeUserIDMD5.slice(8, 12) + "-" + fakeUserIDMD5.slice(12, 16) + "-" + fakeUserIDMD5.slice(16, 20) + "-" + fakeUserIDMD5.slice(20);
+            // fakeHostName = fakeUserIDMD5.slice(6, 9) + "." + fakeUserIDMD5.slice(13, 19) + ".xyz";
 
             if (!userAgent.includes('subconverter') && (userAgent.includes('clash') && !userAgent.includes('nekobox') && !userAgent.includes('cf-workers-sub'))) {
                 subConverterUrl = `https://${subConverter}/sub?target=clash&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=false&new_name=true`;
@@ -60,7 +60,7 @@ export default {
                 });
             }
             //console.log(`subConverterUrl: ${subConverterUrl}`);
-            
+
             try {
                 const subConverterResponse = await fetch(subConverterUrl);
 
@@ -85,8 +85,22 @@ export default {
                 });
             }
 
+        } else {
+            const envKey = env.URL302 ? 'URL302' : (env.URL ? 'URL' : null);
+            if (envKey) {
+                const URLs = await 整理(env[envKey]);
+                if (URLs.includes('nginx')) {
+                    return new Response(await nginx(), {
+                        headers: {
+                            'Content-Type': 'text/html; charset=UTF-8',
+                        },
+                    });
+                }
+                const URL = URLs[Math.floor(Math.random() * URLs.length)];
+                return envKey === 'URL302' ? Response.redirect(URL, 302) : fetch(new Request(URL, request));
+            }
+            return await Html(request);
         }
-        return new Response('Hello World!');
     },
 };
 
@@ -218,4 +232,256 @@ async function MD5MD5(text) {
     const secondHex = secondPassArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
     return secondHex.toLowerCase();
+}
+
+async function nginx() {
+    const text = `
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<title>Welcome to nginx!</title>
+	<style>
+		body {
+			width: 35em;
+			margin: 0 auto;
+			font-family: Tahoma, Verdana, Arial, sans-serif;
+		}
+	</style>
+	</head>
+	<body>
+	<h1>Welcome to nginx!</h1>
+	<p>If you see this page, the nginx web server is successfully installed and
+	working. Further configuration is required.</p>
+	
+	<p>For online documentation and support please refer to
+	<a href="http://nginx.org/">nginx.org</a>.<br/>
+	Commercial support is available at
+	<a href="http://nginx.com/">nginx.com</a>.</p>
+	
+	<p><em>Thank you for using nginx.</em></p>
+	</body>
+	</html>
+	`
+    return text;
+}
+
+async function Html(request) {
+    const url = new URL(request.url);
+    const host = url.host;
+    return new Response(`<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socks2VLESS订阅生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .section-title {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: #444;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            height: 45px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .output {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 0;
+            word-break: break-all;
+            flex: 1;
+            min-height: 45px;
+        }
+        .error {
+            color: #d9534f;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Socks2VLESS订阅生成器</h1>
+        
+        <!-- 第一个板块：节点信息 -->
+        <div class="section">
+            <h2 class="section-title">节点信息</h2>
+            <div class="form-group">
+                <label for="nodeLink">节点链接:</label>
+                <input type="text" id="nodeLink" placeholder="请输入 vless://... 或 trojan://... 格式的节点链接">
+                <div id="nodeLinkError" class="error"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="preferredDomain">优选域名:</label>
+                    <input type="text" id="preferredDomain" placeholder="icook.hk">
+                </div>
+                <div class="form-group">
+                    <label for="preferredPort">优选端口:</label>
+                    <input type="text" id="preferredPort" placeholder="443">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第二个板块：SOCKS5信息 -->
+        <div class="section">
+            <h2 class="section-title">SOCKS5</h2>
+            <div class="form-group">
+                <label for="socks5Api">SOCKS5 API链接 (每行一个):</label>
+                <textarea id="socks5Api" placeholder="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json"></textarea>
+            </div>
+        </div>
+        
+        <!-- 第三个板块：生成订阅 -->
+        <div class="section">
+            <h2 class="section-title">订阅链接</h2>
+            <div class="output-container">
+                <button id="generateBtn">生成订阅</button>
+                <div id="subscriptionLink" class="output"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            // 获取输入值
+            const nodeLink = document.getElementById('nodeLink').value.trim();
+            let preferredDomain = document.getElementById('preferredDomain').value.trim() || 'icook.hk';
+            let preferredPort = document.getElementById('preferredPort').value.trim() || '443';
+            let socks5Api = document.getElementById('socks5Api').value.trim() || 
+                'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json';
+            
+            // 重置错误消息
+            document.getElementById('nodeLinkError').textContent = '';
+            
+            // 检查节点链接格式
+            if (!nodeLink) {
+                document.getElementById('nodeLinkError').textContent = '请输入节点链接';
+                return;
+            }
+            
+            if (!nodeLink.startsWith('vless://') && !nodeLink.startsWith('trojan://')) {
+                document.getElementById('nodeLinkError').textContent = '请输入正确格式的节点链接 (vless:// 或 trojan://)';
+                return;
+            }
+
+            // 解析节点链接
+            let host, uuidOrPassword, linkType;
+            try {
+                if (nodeLink.startsWith('vless://')) {
+                    linkType = 'vless';
+                } else if (nodeLink.startsWith('trojan://')) {
+                    linkType = 'trojan';
+                }
+
+                uuidOrPassword = nodeLink.split('@')[0].split('://')[1];
+                host = host || nodeLink.split('host=')[1].split('&')[0];
+
+                if (!host || !uuidOrPassword) {
+                    throw new Error("无法从链接中提取必要的信息");
+                }
+
+                // 调试信息
+                console.log("解析结果:", {linkType, host, uuidOrPassword});
+            } catch (error) {
+                document.getElementById('nodeLinkError').textContent = '解析节点链接失败: ' + error.message;
+                return;
+            }
+
+            // 处理 SOCKS5 API，替换换行为 | 并进行URL编码
+            const processedSocks5Api = encodeURIComponent(socks5Api.replace(/[\\r\\n]+/g, '|'));
+
+            // 生成订阅链接
+            let subscriptionLink;
+            if (linkType === 'vless') {
+                subscriptionLink = \`https://${host}/sub?host=\${encodeURIComponent(host)}&uuid=\${encodeURIComponent(uuidOrPassword)}&address=\${encodeURIComponent(preferredDomain)}&port=\${encodeURIComponent(preferredPort)}&socks5api=\${processedSocks5Api}\`;
+            } else {
+                subscriptionLink = \`https://${host}/sub?host=\${encodeURIComponent(host)}&pw=\${encodeURIComponent(uuidOrPassword)}&address=\${encodeURIComponent(preferredDomain)}&port=\${encodeURIComponent(preferredPort)}&socks5api=\${processedSocks5Api}\`;
+            }
+
+            // 显示结果
+            document.getElementById('subscriptionLink').textContent = subscriptionLink;
+            
+            // 添加调试信息
+            console.log("生成的订阅链接:", subscriptionLink);
+        });
+    </script>
+</body>
+</html>`, {
+        headers: {
+            "content-type": "text/html;charset=UTF-8",
+        },
+    });
 }

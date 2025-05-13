@@ -26,7 +26,7 @@ export default {
         } else 网站背景 = 'background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);';
 
         if (路径 === '/sub') {
-            const 优选域名 = url.searchParams.get('address') || 'visa.cn';
+            const 优选域名 = url.searchParams.get('address') || 'icook.hk';
             const 优选端口 = url.searchParams.get('port') || '443';
             //判断是否有参数host和uuid
             if (!url.searchParams.has('host') || !(url.searchParams.has('uuid') || url.searchParams.has('password') || url.searchParams.has('pw'))) {
@@ -336,7 +336,7 @@ async function Html(request) {
         }
         
         .container {
-            background-color: rgba(255, 255, 255, 0.7); /* 降低不透明度 */
+            background-color: rgba(255, 255, 255, 0.6); /* 降低不透明度 */
             backdrop-filter: blur(10px); /* 添加模糊效果 */
             -webkit-backdrop-filter: blur(10px); /* Safari 兼容性 */
             border-radius: var(--border-radius);
@@ -376,10 +376,21 @@ async function Html(request) {
             transform: translateX(-50%);
             width: 100px;
             height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color), var(--accent-color), var(--primary-color));
+            background-size: 200% 100%;
+            animation: flowingLight 2s linear infinite;
             border-radius: 2px;
         }
         
+        @keyframes flowingLight {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
         .section {
             background-color: var(--light-bg);
             border-radius: var(--border-radius);

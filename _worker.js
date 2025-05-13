@@ -450,7 +450,7 @@ async function Html(request) {
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             min-width: 250px;
-            max-width: 90vw;
+            max-width: 900px;
             width: max-content;
             left: 50%;
             top: 50%;
@@ -595,7 +595,7 @@ async function Html(request) {
         }
         
         .output::after {
-            content: "点击复制";
+            //content: "点击复制";
             position: absolute;
             right: 15px;
             color: var(--primary-color);
@@ -725,6 +725,7 @@ async function Html(request) {
             border-bottom-style: solid;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
 </head>
 <body>
     <a href="https://github.com/cmliu/Socks2Vlesssub" target="_blank" class="github-corner" aria-label="View source on Github">
@@ -788,6 +789,9 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             <div class="output-container">
                 <button id="generateBtn" class="button">生成订阅</button>
                 <div id="subscriptionLink" class="output">点击左侧按钮生成订阅链接</div>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 15px; margin-bottom: -15px;">
+                <label id="qrcode"></label>
             </div>
         </div>
         
@@ -914,6 +918,19 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             
             // 添加调试信息
             console.log("生成的订阅链接:", subscriptionLink);
+
+            // 更新二维码
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.innerHTML = '';
+            new QRCode(qrcodeDiv, {
+            	text: subscriptionLink,
+            	width: 220, // 调整宽度
+            	height: 220, // 调整高度
+            	colorDark: "#4a60ea", // 二维码颜色
+            	colorLight: "#ffffff", // 背景颜色
+            	correctLevel: QRCode.CorrectLevel.L, // 设置纠错级别
+            	scale: 1 // 调整像素颗粒度
+            });
         });
         
         // 为输入字段添加回车键生成功能

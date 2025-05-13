@@ -52,7 +52,7 @@ export default {
                     socks5s = await 获取socks5api(socks5api);
                 } else {
                     const 内置socks5api = env.SOCKS5API ? await 整理(env.SOCKS5API) : ['https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json'];
-                    socks5s = await 获取socks5api(内置socks5api); 
+                    socks5s = await 获取socks5api(内置socks5api);
                 }
 
                 const links = socks5s.map(socks5带地址 => {
@@ -122,7 +122,7 @@ export default {
 
 async function 获取socks5api(API数组) {
     if (!API数组 || API数组.length === 0) return [];
-    
+
     // 定义新数组，用于存储处理后的结果
     let api = [];
     let socks5数组 = [];
@@ -349,16 +349,6 @@ async function Html(request) {
             overflow: hidden;
         }
         
-        .container::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
-        }
-        
         h1 {
             text-align: center;
             color: var(--primary-color);
@@ -384,10 +374,10 @@ async function Html(request) {
         
         @keyframes flowingLight {
             0% {
-                background-position: 0% 50%;
+                background-position: 200% 50%;
             }
             100% {
-                background-position: 200% 50%;
+                background-position: 0% 50%;
             }
         }
 
@@ -780,7 +770,7 @@ async function Html(request) {
         <div class="section">
             <h2 class="section-title">SOCKS5</h2>
             <div class="form-group">
-                <label for="socks5Api">API链接：</label>
+                <label for="socks5Api">Socks5落地：</label>
 <textarea id="socks5Api" rows="4" style="height: auto;" placeholder="socks5://66.42.224.229:41679#US
 socks5://123:123@64.226.95.45:1080#DE
 https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json

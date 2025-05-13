@@ -104,11 +104,20 @@ export default {
     },
 };
 
-async function 获取socks5api(api) {
-    if (!api || api.length === 0) return [];
-
-    // 定义一个新的数组，用于存储处理后的结果
+async function 获取socks5api(API数组) {
+    if (!API数组 || API数组.length === 0) return [];
+    
+    // 定义新数组，用于存储处理后的结果
+    let api = [];
     let socks5数组 = [];
+
+    for (const element of API数组) {
+        if (element.toLowerCase().startsWith('socks5://')) {
+            socks5数组.push(element);	
+        } else if (element.toLowerCase().startsWith('http')) {
+            api.push(element);
+        }
+    }
 
     // 创建一个AbortController对象，用于控制fetch请求的取消
     const controller = new AbortController();

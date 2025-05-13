@@ -1,5 +1,6 @@
 # 🚀 Socks2VLESS订阅生成器 Socks2Vlesssub
-这是一个可以通过 edgetunnel、epeius 项目将 Socks5 转换成 VLESS、Trojan 的订阅生成器，自适应支持多种订阅格式。
+![sub](./sub.png)
+这是一个可以通过 [edgetunnel](https://github.com/cmliu/edgetunnel)、[epeius](https://github.com/cmliu/epeius) 项目将 Socks5 转换成 VLESS、Trojan 的订阅生成器，自适应支持多种订阅格式。
 
 > [!WARNING]
 > 注意！这是一个**公益服务项目**，请不要将私人 Socks5 放入`SOCKS5API`变量，这会让所有人都能获得此 Socks5！！！
@@ -16,7 +17,7 @@
 ---
 
 ## ⚙️ 如何使用？
-- **节点链接** 填入 edgetunnel、epeius 生成的 VLESS、Trojan 的LINK地址，后点击`生成订阅`，即可生成对应的订阅链接
+- **节点链接** 填入 [edgetunnel](https://github.com/cmliu/edgetunnel)、[epeius](https://github.com/cmliu/epeius) 生成的 VLESS、Trojan 的LINK地址，后点击 `生成订阅`，即可生成对应的订阅链接
 
 ---
 

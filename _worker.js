@@ -5,6 +5,8 @@ let subConverter = 'subapi.cmliussss.net';
 let subConfig = 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini.ini';
 const fakeUserID = '00000000-0000-0000-0000-000000000000';
 const fakeHostName = 'www.baidu.com';
+let 网络备案 = `© 2025 Socks2VLESS订阅生成器 - <a href='https://t.me/CMLiussss'>萌ICP备-20240707号</a>`;//写你自己的维护者广告
+let 网站图标, 网站背景;
 
 export default {
     async fetch(request, env, ctx) {
@@ -12,6 +14,16 @@ export default {
         const 路径 = url.pathname;
         const userAgentHeader = request.headers.get('User-Agent');
         const userAgent = userAgentHeader ? userAgentHeader.toLowerCase() : "null";
+
+        subConverter = env.SUBAPI || subConverter;
+        subConfig = env.SUBCONFIG || subConfig;
+        FileName = env.SUBNAME || FileName;
+        网站图标 = env.ICO ? `<link rel="icon" sizes="32x32" href="${env.ICO}">` : '';
+        网络备案 = env.BEIAN || env.BY || 网络备案;
+        if (env.IMG) {
+            const imgs = await 整理(env.IMG);
+            网站背景 = `background-image: url('${imgs[Math.floor(Math.random() * imgs.length)]}');`;
+        } else 网站背景 = 'background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);';
 
         if (路径 === '/sub') {
             const 优选域名 = url.searchParams.get('address') || 'visa.cn';
@@ -52,7 +64,7 @@ export default {
 
                 return new Response(btoa(还原真实ID(links, uuid, host)), {
                     headers: {
-                        //"Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
+                        "Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
                         "content-type": "text/plain; charset=utf-8",
                         "Profile-Update-Interval": `${SUBUpdateTime}`,
                         //"Subscription-Userinfo": `upload=${UD}; download=${UD}; total=${total}; expire=${expire}`,
@@ -72,7 +84,7 @@ export default {
                 subConverterContent = 还原真实ID(subConverterContent, uuid, host);
                 return new Response(subConverterContent, {
                     headers: {
-                        //"Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
+                        "Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
                         "content-type": "text/plain; charset=utf-8",
                         "Profile-Update-Interval": `${SUBUpdateTime}`,
                         //"Subscription-Userinfo": `upload=${UD}; download=${UD}; total=${total}; expire=${expire}`,
@@ -113,7 +125,7 @@ async function 获取socks5api(API数组) {
 
     for (const element of API数组) {
         if (element.toLowerCase().startsWith('socks5://')) {
-            socks5数组.push(element);	
+            socks5数组.push(element);
         } else if (element.toLowerCase().startsWith('http')) {
             api.push(element);
         }
@@ -245,32 +257,32 @@ async function MD5MD5(text) {
 
 async function nginx() {
     const text = `
-	<!DOCTYPE html>
-	<html>
-	<head>
-	<title>Welcome to nginx!</title>
-	<style>
-		body {
-			width: 35em;
-			margin: 0 auto;
-			font-family: Tahoma, Verdana, Arial, sans-serif;
-		}
-	</style>
-	</head>
-	<body>
-	<h1>Welcome to nginx!</h1>
-	<p>If you see this page, the nginx web server is successfully installed and
-	working. Further configuration is required.</p>
-	
-	<p>For online documentation and support please refer to
-	<a href="http://nginx.org/">nginx.org</a>.<br/>
-	Commercial support is available at
-	<a href="http://nginx.com/">nginx.com</a>.</p>
-	
-	<p><em>Thank you for using nginx.</em></p>
-	</body>
-	</html>
-	`
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Welcome to nginx!</title>
+    <style>
+        body {
+            width: 35em;
+            margin: 0 auto;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+    </style>
+    </head>
+    <body>
+    <h1>Welcome to nginx!</h1>
+    <p>If you see this page, the nginx web server is successfully installed and
+    working. Further configuration is required.</p>
+    
+    <p>For online documentation and support please refer to
+    <a href="http://nginx.org/">nginx.org</a>.<br/>
+    Commercial support is available at
+    <a href="http://nginx.com/">nginx.com</a>.</p>
+    
+    <p><em>Thank you for using nginx.</em></p>
+    </body>
+    </html>
+    `
     return text;
 }
 
@@ -282,7 +294,8 @@ async function Html(request) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socks2VLESS订阅生成器</title>
+    <title>${FileName}</title>
+    ${网站图标}
     <style>
         :root {
             --primary-color: #4361ee;
@@ -304,19 +317,24 @@ async function Html(request) {
         }
         
         body {
+            ${网站背景}
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--bg-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: var(--dark-text);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.7); /* 降低不透明度 */
+            backdrop-filter: blur(10px); /* 添加模糊效果 */
+            -webkit-backdrop-filter: blur(10px); /* Safari 兼容性 */
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             width: 100%;
@@ -691,18 +709,33 @@ async function Html(request) {
             animation: octocat-wave 560ms ease-in-out;
         }
 
+        .beian-info {
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .beian-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--primary-color);
+            padding-bottom: 2px;
+        }
+
+        .beian-info a:hover {
+            border-bottom-style: solid;
+        }
     </style>
 </head>
 <body>
     <a href="https://github.com/cmliu/Socks2Vlesssub" target="_blank" class="github-corner" aria-label="View source on Github">
-					<svg viewBox="0 0 250 250" aria-hidden="true">
-						<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-						<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-						<path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
-					</svg>
-	</a>
+        <svg viewBox="0 0 250 250" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+        </svg>
+    </a>
     <div class="container fade-in">
-        <h1>Socks2VLESS订阅生成器</h1>
+        <h1>${FileName}</h1>
         
         <!-- 第一个板块：节点信息 -->
         <div class="section">
@@ -723,7 +756,7 @@ async function Html(request) {
                 </div>
             </div>
             <div class="form-group tooltip">
-                <p><small>需自行部署 <a href="https://github.com/cmliu/edgetunnel" target="_blank">edgetunnel</a>、<a href="https://github.com/cmliu/epeius" target="_blank">epeius</a> 等项目</small></p>
+                <p><small>需自行部署 <a href="https://github.com/cmliu/edgetunnel" target="_blank">edgetunnel</a>、<a href="https://github.com/cmliu/epeius" target="_blank">epeius</a> 项目</small></p>
             </div>
         </div>
         
@@ -732,8 +765,11 @@ async function Html(request) {
             <h2 class="section-title">SOCKS5</h2>
             <div class="form-group">
                 <label for="socks5Api">API链接：</label>
-                <textarea id="socks5Api" placeholder="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json"></textarea>
-                <p><small>每行一个API地址，支持 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> 和 <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a> 格式</small></p>
+<textarea id="socks5Api" rows="4" style="height: auto;" placeholder="socks5://66.42.224.229:41679#US
+socks5://123:123@64.226.95.45:1080#DE
+https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json
+https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt"></textarea>
+                <p><small>每行一个 Socks5链接 或 API链接，API支持 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> 和 <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a> 格式</small></p>
             </div>
         </div>
         
@@ -755,8 +791,8 @@ async function Html(request) {
             </div>
         </div>
         
-        <div class="footer">
-            © 2025 Socks2VLESS订阅生成器 - <a href="https://github.com/cmliu/Socks2Vlesssub" target="_blank">GitHub</a>
+        <div class="beian-info" style="text-align: center; font-size: 13px;">
+            ${网络备案}
         </div>
     </div>
 

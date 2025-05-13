@@ -788,7 +788,11 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             </div>
             <div class="output-container">
                 <button id="generateBtn" class="button">生成订阅</button>
-                <div id="subscriptionLink" class="output">点击左侧按钮生成订阅链接</div>
+                <div id="subscriptionLink" class="output">点击按钮生成订阅链接</div>
+            </div>
+            <div class="output-container" style="margin-top: 15px;">
+                <button id="generateShortUrl" class="button" style="background: linear-gradient(90deg, #10b981, #059669); opacity: 0.6; cursor: not-allowed;" disabled>生成短链</button>
+                <div id="ShortUrl" class="output">点击按钮生成短链接</div>
             </div>
             <div style="display: flex; justify-content: center; margin-top: 15px; margin-bottom: -15px;">
                 <label id="qrcode"></label>
@@ -803,6 +807,24 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
     <script>
         // 为输出文本框添加点击复制功能
         document.getElementById('subscriptionLink').addEventListener('click', function() {
+            const text = this.textContent;
+            if (text && !text.includes('点击左侧按钮')) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = this.textContent;
+                    this.classList.add('copied');
+                    this.textContent = '已复制到剪贴板!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.classList.remove('copied');
+                    }, 1500);
+                }).catch(err => {
+                    console.error('复制失败: ', err);
+                });
+            }
+        });
+        
+        // 为ShortUrl添加点击复制功能
+        document.getElementById('ShortUrl').addEventListener('click', function() {
             const text = this.textContent;
             if (text && !text.includes('点击左侧按钮')) {
                 navigator.clipboard.writeText(text).then(() => {
@@ -857,6 +879,14 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             nodeLinkErrorElement.classList.remove('show'); // 隐藏错误提示
             
             const subscriptionLinkElement = document.getElementById('subscriptionLink');
+            const generateShortUrlBtn = document.getElementById('generateShortUrl');
+            const ShortUrl = document.getElementById('ShortUrl');
+            
+            // 重置短链接区域
+            generateShortUrlBtn.disabled = true;
+            generateShortUrlBtn.style.opacity = "0.6";
+            generateShortUrlBtn.style.cursor = "not-allowed";
+            ShortUrl.textContent = "点击左侧按钮生成短链接";
             
             // 检查节点链接格式
             if (!nodeLink) {
@@ -916,6 +946,11 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             }, 300);
             subscriptionLinkElement.textContent = subscriptionLink;
             
+            // 启用生成短链按钮
+            generateShortUrlBtn.disabled = false;
+            generateShortUrlBtn.style.opacity = "1";
+            generateShortUrlBtn.style.cursor = "pointer";
+            
             // 添加调试信息
             console.log("生成的订阅链接:", subscriptionLink);
 
@@ -923,13 +958,71 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             const qrcodeDiv = document.getElementById('qrcode');
             qrcodeDiv.innerHTML = '';
             new QRCode(qrcodeDiv, {
-            	text: subscriptionLink,
-            	width: 220, // 调整宽度
-            	height: 220, // 调整高度
-            	colorDark: "#4a60ea", // 二维码颜色
-            	colorLight: "#ffffff", // 背景颜色
-            	correctLevel: QRCode.CorrectLevel.L, // 设置纠错级别
-            	scale: 1 // 调整像素颗粒度
+                text: subscriptionLink,
+                width: 220, // 调整宽度
+                height: 220, // 调整高度
+                colorDark: "#4a60ea", // 二维码颜色
+                colorLight: "#ffffff", // 背景颜色
+                correctLevel: QRCode.CorrectLevel.L, // 设置纠错级别
+                scale: 1 // 调整像素颗粒度
+            });
+        });
+        
+        // 生成短链接按钮的事件监听
+        document.getElementById('generateShortUrl').addEventListener('click', function() {
+            if (this.disabled) return;
+            
+            // 添加点击效果
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+            
+            const subscriptionLink = document.getElementById('subscriptionLink').textContent;
+            const ShortUrl = document.getElementById('ShortUrl');
+            
+            // 显示加载状态
+            ShortUrl.textContent = "正在生成短链接...";
+            
+            // Base64编码
+            const base64Encoded = btoa(subscriptionLink);
+            
+            // 发送POST请求到短链接服务
+            fetch('https://v1.mk/short', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'longUrl=' + encodeURIComponent(base64Encoded)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("短链接响应:", data);
+                if (data.Code === 1 && data.ShortUrl) {
+                    ShortUrl.textContent = data.ShortUrl;
+                    // 更新二维码
+                    const qrcodeDiv = document.getElementById('qrcode');
+                    qrcodeDiv.innerHTML = '';
+                    new QRCode(qrcodeDiv, {
+                        text: ShortUrl.textContent,
+                        width: 220, // 调整宽度
+                        height: 220, // 调整高度
+                        colorDark: "#4a60ea", // 二维码颜色
+                        colorLight: "#ffffff", // 背景颜色
+                        correctLevel: QRCode.CorrectLevel.L, // 设置纠错级别
+                        scale: 1 // 调整像素颗粒度
+                    });
+                    ShortUrl.classList.add('copied');
+                    setTimeout(() => {
+                        ShortUrl.classList.remove('copied');
+                    }, 300);
+                } else {
+                    ShortUrl.textContent = "短链接生成失败，请重试";
+                }
+            })
+            .catch(error => {
+                console.error("生成短链接错误:", error);
+                ShortUrl.textContent = "短链接生成失败，请重试";
             });
         });
         

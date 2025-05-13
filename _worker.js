@@ -47,9 +47,13 @@ export default {
             } else {
                 const 协议类型 = url.searchParams.has('uuid') ? atob('dmxlc3M=') : 'trojan';
 
-                const 内置socks5api = env.SOCKS5API ? await 整理(env.SOCKS5API) : ['https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json'];
-                const socks5api = url.searchParams.has('socks5api') ? await 整理(decodeURIComponent(url.searchParams.get('socks5api'))) : 内置socks5api;
-                socks5s = await 获取socks5api(socks5api);
+                if (url.searchParams.has('socks5api') && url.searchParams.get('socks5api') !== '') {
+                    const socks5api = await 整理(decodeURIComponent(url.searchParams.get('socks5api')));
+                    socks5s = await 获取socks5api(socks5api);
+                } else {
+                    const 内置socks5api = env.SOCKS5API ? await 整理(env.SOCKS5API) : ['https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json'];
+                    socks5s = await 获取socks5api(内置socks5api); 
+                }
 
                 const links = socks5s.map(socks5带地址 => {
                     const socks5 = socks5带地址.split('#')[0];
@@ -870,8 +874,7 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             const nodeLink = document.getElementById('nodeLink').value.trim();
             let preferredDomain = document.getElementById('preferredDomain').value.trim() || 'icook.hk';
             let preferredPort = document.getElementById('preferredPort').value.trim() || '443';
-            let socks5Api = document.getElementById('socks5Api').value.trim() || 
-                'https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json';
+            let socks5Api = document.getElementById('socks5Api').value.trim() || '';
             
             // 重置错误消息
             const nodeLinkErrorElement = document.getElementById('nodeLinkError');

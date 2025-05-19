@@ -211,7 +211,7 @@ async function 获取socks5api(API数组) {
                 } else {
                     const lines = content.split(/\r?\n/);
                     for (const line of lines) {
-                        if (line.startsWith('socks5://')) socks5数组.push(line);
+                        if (line.startsWith('socks5://') || line.startsWith('http://')) socks5数组.push(line);
                     }
                 }
             }

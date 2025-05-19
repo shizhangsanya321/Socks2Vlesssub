@@ -128,10 +128,12 @@ async function 获取socks5api(API数组) {
     let socks5数组 = [];
 
     for (const element of API数组) {
-        if (element.toLowerCase().startsWith('socks5://')) {
+        if (element.toLowerCase().startsWith('http')) {
+            if (element.toLowerCase().startsWith('http://') && element.toLowerCase().split('http://')[1].split('/').length == 1) {
+                socks5数组.push(element);
+            } else api.push(element);
+        } else if (element.toLowerCase().startsWith('socks5://')) {
             socks5数组.push(element);
-        } else if (element.toLowerCase().startsWith('http')) {
-            api.push(element);
         }
     }
 

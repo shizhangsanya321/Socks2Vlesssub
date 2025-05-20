@@ -770,14 +770,14 @@ async function Html(request) {
         
         <!-- 第二个板块：SOCKS5信息 -->
         <div class="section">
-            <h2 class="section-title">SOCKS5</h2>
+            <h2 class="section-title">SOCKS5 & HTTP 代理</h2>
             <div class="form-group">
-                <label for="socks5Api">Socks5落地：</label>
-<textarea id="socks5Api" rows="4" style="height: auto;" placeholder="socks5://66.42.224.229:41679#US
+                <label for="socks5Api">全局代理落地：</label>
+<textarea id="socks5Api" rows="4" style="height: auto;" placeholder="http://45.91.201.88:19999#US
 socks5://123:123@64.226.95.45:1080#DE
 https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json
 https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt"></textarea>
-                <p><small>每行一个 Socks5链接 或 API链接，API支持 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> 和 <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a> 格式</small></p>
+                <p><small>每行一个 <strong>LINK</strong> 或 <strong>API链接</strong>，API支持 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> 和 <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a> 格式</small></p>
             </div>
         </div>
         

@@ -56,7 +56,10 @@ export default {
                 }
 
                 const links = socks5s.map(socks5带地址 => {
-                    const socks5 = socks5带地址.split('#')[0];
+                    const socks5 = socks5带地址.includes('@') ?
+                        socks5带地址.replace(/:\/\/.*?@/, `://${btoa(socks5带地址.match(/:\/\/(.*?)@/)[1])}@`).split('#')[0] :
+                        socks5带地址.split('#')[0];
+
                     const hostMatch = socks5.match(/(socks5|http):\/\/(?:.*@)?([^:\/]+):/);
                     const host名称 = hostMatch ? hostMatch[2] : '未知';
 

@@ -3,6 +3,7 @@ let FileName = 'Socks2VLESS订阅生成器';
 let SUBUpdateTime = 6;
 let subConverter = 'subapi.cmliussss.net';
 let subConfig = 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini.ini';
+let subProtocol = 'https';
 const fakeUserID = '00000000-0000-0000-0000-000000000000';
 const fakeHostName = 'www.baidu.com';
 let 网络备案 = `© 2025 Socks2VLESS订阅生成器 - <a href='https://t.me/CMLiussss'>萌ICP备-20240707号</a>`;//写你自己的维护者广告
@@ -16,6 +17,12 @@ export default {
         const userAgent = userAgentHeader ? userAgentHeader.toLowerCase() : "null";
 
         subConverter = env.SUBAPI || subConverter;
+        if (subConverter.includes("http://")) {
+            subConverter = subConverter.split("//")[1];
+            subProtocol = 'http';
+        } else {
+            subConverter = subConverter.split("//")[1] || subConverter;
+        }
         subConfig = env.SUBCONFIG || subConfig;
         FileName = env.SUBNAME || FileName;
         网站图标 = env.ICO ? `<link rel="icon" sizes="32x32" href="${env.ICO}">` : '';
@@ -40,6 +47,15 @@ export default {
             // fakeUserID = fakeUserIDMD5.slice(0, 8) + "-" + fakeUserIDMD5.slice(8, 12) + "-" + fakeUserIDMD5.slice(12, 16) + "-" + fakeUserIDMD5.slice(16, 20) + "-" + fakeUserIDMD5.slice(20);
             // fakeHostName = fakeUserIDMD5.slice(6, 9) + "." + fakeUserIDMD5.slice(13, 19) + ".xyz";
 
+            // 构建订阅响应头对象
+            const responseHeaders = {
+                "content-type": "text/plain; charset=utf-8",
+                "Profile-Update-Interval": `${SUBUpdateTime}`,
+                "Profile-web-page-url": url.origin,
+                //"Subscription-Userinfo": `upload=${UD}; download=${UD}; total=${total}; expire=${expire}`,
+            };
+            if (!userAgent.includes('mozilla')) responseHeaders["Content-Disposition"] = `attachment; filename*=utf-8''${encodeURIComponent(FileName)}`;
+
             if (!userAgent.includes('subconverter') && (userAgent.includes('clash') && !userAgent.includes('nekobox') && !userAgent.includes('cf-workers-sub'))) {
                 subConverterUrl = `https://${subConverter}/sub?target=clash&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=false&new_name=true`;
             } else if (!userAgent.includes('subconverter') && (userAgent.includes('sing-box') || userAgent.includes('singbox') && !userAgent.includes('cf-workers-sub'))) {
@@ -57,7 +73,31 @@ export default {
 
                 const links = socks5s.map(socks5带地址 => {
                     const socks5 = socks5带地址.includes('@') ?
-                        socks5带地址.replace(/:\/\/.*?@/, `://${btoa(socks5带地址.match(/:\/\/(.*?)@/)[1])}@`).split('#')[0] :
+                        (() => {
+                            // 如果包含#，使用#前的最后一个@作为分隔符
+                            // 如果不包含#，使用最后一个@作为分隔符
+                            let url = socks5带地址;
+                            let hashIndex = url.indexOf('#');
+                            let searchUrl = hashIndex !== -1 ? url.substring(0, hashIndex) : url;
+                            let lastAtIndex = searchUrl.lastIndexOf('@');
+
+                            if (lastAtIndex !== -1) {
+                                // 提取协议部分 (socks5://)
+                                let protocolEndIndex = searchUrl.indexOf('://') + 3;
+                                // 提取用户名密码部分
+                                let credentials = searchUrl.substring(protocolEndIndex, lastAtIndex);
+                                // 编码用户名密码
+                                let encodedCredentials = btoa(credentials);
+                                // 重新组装URL
+                                let result = searchUrl.substring(0, protocolEndIndex) + encodedCredentials + searchUrl.substring(lastAtIndex);
+                                // 如果原来有#，加回去
+                                if (hashIndex !== -1) {
+                                    result += url.substring(hashIndex);
+                                }
+                                return result;
+                            }
+                            return url;
+                        })().split('#')[0] :
                         socks5带地址.split('#')[0];
 
                     const hostMatch = socks5.match(/(socks5|http):\/\/(?:.*@)?([^:\/]+):/);
@@ -69,15 +109,7 @@ export default {
                     return link;
                 }).join('\n');
 
-                return new Response(btoa(还原真实ID(links, uuid, host)), {
-                    headers: {
-                        "Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
-                        "content-type": "text/plain; charset=utf-8",
-                        "Profile-Update-Interval": `${SUBUpdateTime}`,
-                        "Profile-web-page-url": url.origin,
-                        //"Subscription-Userinfo": `upload=${UD}; download=${UD}; total=${total}; expire=${expire}`,
-                    },
-                });
+                return new Response(btoa(还原真实ID(links, uuid, host)), { headers: responseHeaders });
             }
             //console.log(`subConverterUrl: ${subConverterUrl}`);
 
@@ -90,15 +122,7 @@ export default {
 
                 let subConverterContent = await subConverterResponse.text();
                 subConverterContent = 还原真实ID(subConverterContent, uuid, host);
-                return new Response(subConverterContent, {
-                    headers: {
-                        "Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
-                        "content-type": "text/plain; charset=utf-8",
-                        "Profile-Update-Interval": `${SUBUpdateTime}`,
-                        "Profile-web-page-url": url.origin,
-                        //"Subscription-Userinfo": `upload=${UD}; download=${UD}; total=${total}; expire=${expire}`,
-                    },
-                });
+                return new Response(subConverterContent, { headers: responseHeaders });
             } catch (error) {
                 return new Response(`Error: ${error.message}`, {
                     status: 500,
@@ -795,8 +819,8 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             <div id="infoTooltip" class="info-tooltip">
                 <strong>安全提示</strong>：使用优选订阅生成器时，需要您提交 <strong>节点配置信息</strong> 用于生成优选订阅链接。这意味着订阅器的维护者可能会获取到该节点信息。<strong>请自行斟酌使用风险。</strong><br>
                 <br>
-                订阅转换后端：<strong>${subConverter}</strong><br>
-                订阅转换配置文件：<strong>${subConfig}</strong>
+                订阅转换后端：<strong><a href='${subProtocol}://${subConverter}/version' target="_blank" rel="noopener noreferrer">${subProtocol}://${subConverter}</a></strong><br>
+                订阅转换配置文件：<strong><a href='${subConfig}' target="_blank" rel="noopener noreferrer">${subConfig}</a></strong>
             </div>
             <div class="output-container">
                 <button id="generateBtn" class="button">生成订阅</button>

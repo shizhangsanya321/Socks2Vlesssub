@@ -144,7 +144,8 @@ export default {
                 const URL = URLs[Math.floor(Math.random() * URLs.length)];
                 return envKey === 'URL302' ? Response.redirect(URL, 302) : fetch(new Request(URL, request));
             }
-            return await Html(request);
+            const socks5DIY = env.SOCKS5DIY || env.DIY || true;
+            return await Html(request, socks5DIY == true);
         }
     },
 };
@@ -321,7 +322,7 @@ async function nginx() {
     return text;
 }
 
-async function Html(request) {
+async function Html(request, DIY = true) {
     const url = new URL(request.url);
     const host = url.host;
     return new Response(`<!DOCTYPE html>
@@ -486,7 +487,7 @@ async function Html(request) {
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             min-width: 250px;
-            max-width: 900px;
+            max-width: min(900px, calc(100vw - 40px)); /* 优化: 确保不超出屏幕宽度，左右留20px边距 */
             width: max-content;
             left: 50%;
             top: 50%;
@@ -498,6 +499,28 @@ async function Html(request) {
             word-wrap: break-word;
             overflow-wrap: break-word;
             animation: fadeInScale 0.3s ease-out;
+        }
+        
+        /* 手机端优化: 提示框样式调整 */
+        @media (max-width: 768px) {
+            .info-tooltip {
+                min-width: 280px;
+                max-width: calc(100vw - 30px); /* 手机端左右留15px边距 */
+                padding: 12px;
+                font-size: 13px;
+                max-height: calc(100vh - 100px); /* 限制最大高度，避免超出屏幕 */
+                overflow-y: auto; /* 内容过多时允许滚动 */
+            }
+        }
+        
+        /* 小屏手机优化 */
+        @media (max-width: 480px) {
+            .info-tooltip {
+                min-width: 250px;
+                max-width: calc(100vw - 20px); /* 小屏手机左右留10px边距 */
+                padding: 10px;
+                font-size: 12px;
+            }
         }
         
         /* 添加: 提示框动画 */
@@ -798,7 +821,7 @@ async function Html(request) {
         </div>
         
         <!-- 第二个板块：SOCKS5信息 -->
-        <div class="section">
+        ${DIY ? `<div class="section">
             <h2 class="section-title">SOCKS5 & HTTP 代理</h2>
             <div class="form-group">
                 <label for="socks5Api">全局代理落地：</label>
@@ -808,7 +831,7 @@ https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocol
 https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt"></textarea>
                 <p><small>每行一个 <strong>LINK</strong> 或 <strong>API链接</strong>，API支持 <a href="https://raw.githubusercontent.com/proxifly/free-proxy-list/main/proxies/protocols/socks5/data.json" target="_blank">Json</a> 和 <a href="https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api.txt" target="_blank">txt</a> 格式</small></p>
             </div>
-        </div>
+        </div>` : ''}
         
         <!-- 第三个板块：生成订阅 -->
         <div class="section">
@@ -817,7 +840,7 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
                 <span class="info-icon" id="infoIcon">!</span>
             </h2>
             <div id="infoTooltip" class="info-tooltip">
-                <strong>安全提示</strong>：使用优选订阅生成器时，需要您提交 <strong>节点配置信息</strong> 用于生成优选订阅链接。这意味着订阅器的维护者可能会获取到该节点信息。<strong>请自行斟酌使用风险。</strong><br>
+                <strong>安全提示</strong>：使用Socks2VLESS订阅生成器时，需要您提交 <strong>节点配置信息</strong> 用于生成优选订阅链接。这意味着订阅器的维护者可能会获取到该节点信息。<strong>请自行斟酌使用风险。</strong><br>
                 <br>
                 订阅转换后端：<strong><a href='${subProtocol}://${subConverter}/version' target="_blank" rel="noopener noreferrer">${subProtocol}://${subConverter}</a></strong><br>
                 订阅转换配置文件：<strong><a href='${subConfig}' target="_blank" rel="noopener noreferrer">${subConfig}</a></strong>
@@ -906,7 +929,10 @@ https://raw.githubusercontent.com/cmliu/Socks2Vlesssub/refs/heads/main/socks5api
             const nodeLink = document.getElementById('nodeLink').value.trim();
             let preferredDomain = document.getElementById('preferredDomain').value.trim() || 'icook.hk';
             let preferredPort = document.getElementById('preferredPort').value.trim() || '443';
-            let socks5Api = document.getElementById('socks5Api').value.trim() || '';
+            
+            // 检查socks5Api元素是否存在（当DIYsocks5为false时该元素不存在）
+            const socks5ApiElement = document.getElementById('socks5Api');
+            let socks5Api = socks5ApiElement ? socks5ApiElement.value.trim() : '';
             
             // 重置错误消息
             const nodeLinkErrorElement = document.getElementById('nodeLinkError');
